@@ -3,3 +3,11 @@
 
 
 <a href="/auth/slack">Login With Slack</a>
+
+<br><br>
+{{#unless user}}
+  Home page
+  <div>
+    <a href="/auth/google">Login With Google</a>
+  </div>
+{{/unless}}

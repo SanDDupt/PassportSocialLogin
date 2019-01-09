@@ -16,6 +16,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 
 const SlackStrategy = require("passport-slack").Strategy;
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 // Require user model
 const User = require("./models/user");
@@ -98,14 +99,46 @@ passport.use(
 );
 
 // Slack
+// passport.use(
+//   new SlackStrategy(
+//     {
+//       clientID: "2432150752.520234749733",
+//       clientSecret: "d6c66ad9ecc51f54894c203f96d1ecf9"
+//     },
+//     (accessToken, refreshToken, profile, done) => {
+//       User.findOne({ slackID: profile.id })
+//         .then(user => {
+//           if (err) {
+//             return done(err);
+//           }
+//           if (user) {
+//             return done(null, user);
+//           }
+//           const newUser = new User({
+//             slackID: profile.id
+//           });
+//           newUser.save().then(user => {
+//             done(null, newUser);
+//           });
+//         })
+//         .catch(error => {
+//           next(error);
+//         });
+//     }
+//   )
+// );
+
+// GOOGLE
 passport.use(
-  new SlackStrategy(
+  new GoogleStrategy(
     {
-      clientID: "2432150752.520234749733",
-      clientSecret: "d6c66ad9ecc51f54894c203f96d1ecf9"
+      clientID:
+        "1017804540862-kpjh2m05s9v1dcu5qa74ovseut7i7c2d.apps.googleusercontent.com",
+      clientSecret: "XxG_ObZ5dU74DLHwFxtspWFx",
+      callbackURL: "/auth/google/callback"
     },
     (accessToken, refreshToken, profile, done) => {
-      User.findOne({ slackID: profile.id })
+      User.findOne({ googleID: profile.id })
         .then(user => {
           if (err) {
             return done(err);
@@ -113,9 +146,11 @@ passport.use(
           if (user) {
             return done(null, user);
           }
+
           const newUser = new User({
-            slackID: profile.id
+            googleID: profile.id
           });
+
           newUser.save().then(user => {
             done(null, newUser);
           });

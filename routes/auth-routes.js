@@ -57,25 +57,36 @@ authRoutes.post("/signup", (req, res, next) => {
 });
 
 // ROUTE LOGIN : GET + POST
-authRoutes.get("/login", (req, res, next) => {
-  res.render("auth/login", { message: req.flash("error") });
-});
+// authRoutes.get("/login", (req, res, next) => {
+//   res.render("auth/login", { message: req.flash("error") });
+// });
 
-authRoutes.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-    passReqToCallback: true
-  })
-);
+// authRoutes.post(
+//   "/login",
+//   passport.authenticate("local", {
+//     successRedirect: "/",
+//     failureRedirect: "/login",
+//     failureFlash: true,
+//     passReqToCallback: true
+//   })
+// );
 
 // 2 ROUTES SLACK : GET + GET
-authRoutes.get("/auth/slack", passport.authenticate("slack"));
-authRoutes.get("/auth/slack/callback", passport.authenticate("slack", {
-  successRedirect: "/private-page",
-  failureRedirect: "/"
+// authRoutes.get("/auth/slack", passport.authenticate("slack"));
+// authRoutes.get("/auth/slack/callback", passport.authenticate("slack", {
+//   successRedirect: "/private-page",
+//   failureRedirect: "/"
+// }));
+
+// 2 ROUTES GOOGLE : GET + GET
+authRoutes.get("/auth/google", passport.authenticate("google", {
+  scope: ["https://www.googleapis.com/auth/plus.login",
+          "https://www.googleapis.com/auth/plus.profile.emails.read"]
+}));
+
+authRoutes.get("/auth/google/callback", passport.authenticate("google", {
+  failureRedirect: "/",
+  successRedirect: "/private-page"
 }));
 
 
