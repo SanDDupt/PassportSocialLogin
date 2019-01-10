@@ -99,68 +99,66 @@ passport.use(
 );
 
 // Slack
-// passport.use(
-//   new SlackStrategy(
-//     {
-//       clientID: "2432150752.520234749733",
-//       clientSecret: "d6c66ad9ecc51f54894c203f96d1ecf9"
-//     },
-//     (accessToken, refreshToken, profile, done) => {
-//       User.findOne({ slackID: profile.id })
-//         .then(user => {
-//           if (err) {
-//             return done(err);
-//           }
-//           if (user) {
-//             return done(null, user);
-//           }
-//           const newUser = new User({
-//             slackID: profile.id
-//           });
-//           newUser.save().then(user => {
-//             done(null, newUser);
-//           });
-//         })
-//         .catch(error => {
-//           next(error);
-//         });
-//     }
-//   )
-// );
-
-// GOOGLE
 passport.use(
-  new GoogleStrategy(
+  new SlackStrategy(
     {
-      clientID:
-        "1017804540862-kpjh2m05s9v1dcu5qa74ovseut7i7c2d.apps.googleusercontent.com",
-      clientSecret: "XxG_ObZ5dU74DLHwFxtspWFx",
-      callbackURL: "/auth/google/callback"
+      clientID: "2432150752.520234749733",
+      clientSecret: "d6c66ad9ecc51f54894c203f96d1ecf9"
     },
     (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleID: profile.id })
+      User.findOne({ slackID: profile.id })
         .then(user => {
-          if (err) {
-            return done(err);
-          }
+          // if (err) {
+          //   return done(err);
+          // }
           if (user) {
             return done(null, user);
           }
-
           const newUser = new User({
-            googleID: profile.id
+            slackID: profile.id
           });
-
           newUser.save().then(user => {
             done(null, newUser);
           });
         })
         .catch(error => {
-          next(error);
+          //next(error); 
+          console.error(error);
         });
     }
   )
 );
+
+// GOOGLE
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID:
+//         "1017804540862-kpjh2m05s9v1dcu5qa74ovseut7i7c2d.apps.googleusercontent.com",
+//       clientSecret: "XxG_ObZ5dU74DLHwFxtspWFx",
+//       callbackURL: "/auth/google/callback"
+//     },
+//     (accessToken, refreshToken, profile, done) => {
+//       User.findOne({ googleID: profile.id })
+//         .then(user => {
+//           if (user) {
+//             return done(null, user);
+//           }
+
+//           const newUser = new User({
+//             googleID: profile.id
+//           });
+
+//           newUser.save().then(user => {
+//             done(null, newUser);
+//           });
+//         })
+//         .catch(error => {
+//           console.error(error);
+//         });
+//     }
+//   )
+// );
 
 // Express View engine setup
 app.use(
